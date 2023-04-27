@@ -15,7 +15,7 @@ for app in "${apps[@]}"; do
     docker-compose up -d $app
 done
 
-# install git for both LMS and Studio
+# install git for both LMS and CMS
 for app in "${apps[@]}"; do
     docker-compose exec -T  $app bash -e -c 'apt-get update && apt-get -y install --no-install-recommends git'
 
@@ -33,10 +33,10 @@ docker-compose exec -T lms bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx
 docker-compose exec -T lms bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py lms showmigrations --database student_module_history --traceback --pythonpath=. --settings devstack_docker'
 docker-compose exec -T lms bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py lms migrate --database student_module_history --noinput --traceback --pythonpath=. --settings devstack_docker'
 
-docker-compose exec -T studio bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms showmigrations --database default --traceback --pythonpath=. --settings devstack_docker'
-docker-compose exec -T studio bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms migrate --database default --noinput --traceback --pythonpath=. --settings devstack_docker'
-docker-compose exec -T studio bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms showmigrations --database student_module_history --traceback --pythonpath=. --settings devstack_docker'
-docker-compose exec -T studio bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms migrate --database student_module_history --noinput --traceback --pythonpath=. --settings devstack_docker'
+docker-compose exec -T cms bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms showmigrations --database default --traceback --pythonpath=. --settings devstack_docker'
+docker-compose exec -T cms bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms migrate --database default --noinput --traceback --pythonpath=. --settings devstack_docker'
+docker-compose exec -T cms bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms showmigrations --database student_module_history --traceback --pythonpath=. --settings devstack_docker'
+docker-compose exec -T cms bash -e -c 'source /edx/app/edxapp/edxapp_env && /edx/app/edxapp/venvs/edxapp/bin/python /edx/app/edxapp/edx-platform/manage.py cms migrate --database student_module_history --noinput --traceback --pythonpath=. --settings devstack_docker'
 
 # Create a superuser for edxapp
 docker-compose exec -T lms bash -e -c 'source /edx/app/edxapp/edxapp_env && python /edx/app/edxapp/edx-platform/manage.py lms --settings=devstack_docker manage_user edx edx@example.com --superuser --staff'
